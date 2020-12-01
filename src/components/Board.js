@@ -8,7 +8,8 @@ export class Board extends React.Component{
         this.xo= new XO();
     }
     render(){
-        var m = this.xo.matrix;
+        var m = this.xo.cells;
+
         return "m[][]";
     }
 }
