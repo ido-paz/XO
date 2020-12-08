@@ -1,9 +1,18 @@
 import React from 'react';
 import { Cell } from '../components/Cell';
 import { Board } from "./Board";
+import "./XO.css";
 export class XO extends React.Component{
     constructor(props){
         super(props);
+        this.initialize = this.initialize.bind(this);
+        this.getPlayer = this.togglePlayer.bind(this);
+        this.move = this.move.bind(this);
+        this.isValidMove = this.isValidMove.bind(this);
+        this.didPlayerWon = this.didPlayerWon.bind(this);
+        this.didWonVerticaly = this.didWonVerticaly.bind(this);
+        this.didWonHorizontaly = this.didWonHorizontaly.bind(this);
+        this.didWonDiagonaly = this.didWonDiagonaly.bind(this);
         this.initialize();
     }
     //
@@ -14,23 +23,39 @@ export class XO extends React.Component{
         this.winningPlayer = null;
         let board = new Board(3);
         this.cells =board.cells;
+        this.players = ['X','O'];
+        this.currentPlayer = this.players[0];
     }
     //
-    move(player,rowIndex,columnIndex){
-        if (!this.isGameOver && this.isValidMove(player,rowIndex,columnIndex)) {
-            this.cells[rowIndex][columnIndex].setPlayer(player);  
-            this.isGameOver = this.didPlayerWon();
-            if(this.isGameOver){
-                this.endedDate = new Date();
-                this.winningPlayer = player;
-            }
-            return this.isGameOver; 
+    getPlayer(){
+        return this.currentPlayer;
+    }
+    //
+    togglePlayer(){
+        return this.currentPlayer && this.currentPlayer==this.players[0]?
+                    this.players[1]:
+                    this.players[0];
+    }
+    //
+    move(rowIndex,columnIndex){
+        console.log(rowIndex,columnIndex);
+        if (!this.isGameOver)
+        {
+            if(this.isValidMove(rowIndex,columnIndex)) {
+                this.currentPlayer = this.togglePlayer();
+                this.cells[rowIndex][columnIndex].setPlayer(this.currentPlayer);  
+                this.isGameOver = this.didPlayerWon();
+                if(this.isGameOver){
+                    this.endedDate = new Date();
+                    this.winningPlayer = this.currentPlayer;
+                }
+                return !this.isGameOver; 
+            }   
         }
-        else//throw Error(`invalid move, already chosed by player ${this.matrix[rowIndex][columnIndex]}`);        
-            return false;
+        return false;
     }
     //
-    isValidMove(player,rowIndex,columnIndex){
+    isValidMove(rowIndex,columnIndex){
         return !this.cells[rowIndex][columnIndex].getPlayer();
     }
     //check Vertical , Horizontal , Diagonaly
@@ -72,31 +97,36 @@ export class XO extends React.Component{
     //
     didWonDiagonaly(){
         var m = this.cells;
-        return (m[0,0].getPlayer() && m[1,1].getPlayer() && m[2,1].getPlayer()) || 
-                (m[0,2].getPlayer() && m[1,1].getPlayer() && m[2,0].getPlayer());
+        let p = this.getPlayer();
+        return (p==m[0][0].getPlayer() && p==m[1][1].getPlayer() && p==m[2][1].getPlayer()) || 
+                (p==m[0][2].getPlayer() && p==m[1][1].getPlayer() && p==m[2][0].getPlayer());
     }
     //
     render(){
         let cells = this.cells;
         let numberOfCells=9;
         let c =[];
-        for (let i = 0; i < cells.length; i++) {
-            for (let j = 0; j < cells[i].length; j++) {
-                c.push(<Cell key={i+j+1} 
+        let a=[0,1,2,3,4,5,6,7,8];
+        for (let i = 0,keyID=0; i < cells.length; i++) {
+            for (let j = 0; j < cells[i].length; j++,keyID++) {
+                c.push(<Cell key={keyID} 
                              onSelected={this.move}
                              rowNumber={i} 
                              colNumber={j}></Cell>);            
             }
         }
-        // let c= cells.map((item,index)=>{
-        //     return <Cell key={index} 
-        //                  rowNumber={item.rowNumber} 
-        //                  colNumber={item.colNumber}>
-        //             </Cell>
-        // });
+        // ;return <div className="xo">
+        //         {a.map((i)=>{
+        //             return <Cell key={i} 
+        //                                     onSelected={this.move}
+        //                                     rowNumber={i} 
+        //                                     colNumber={i}>
+        //                     </Cell>
+        //         })}
+        //         </div> 
         
         console.log(cells);
         console.log(c);
-        return  c;
+        return  <div className="xo">{c}</div>;
     }
 }
