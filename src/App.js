@@ -1,10 +1,10 @@
 import logo from './logo.svg';
 import './App.css';
-import { Board } from './components/Board';
+import { XO } from './models/XO';
 
 function App() {
   return (
-   <Board></Board>
+   <XO></XO>
   );
 }
 
