@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import { XO } from './models/XO';
+import { XO } from './components/XO';
 
 function App() {
   return (
