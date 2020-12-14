@@ -2,6 +2,7 @@ import React from 'react';
 import { Cell } from '../components/Cell';
 import { createMatrix } from '../models/Utils';
 import "./XO.css";
+//
 export class XO extends React.Component{
     constructor(props){
         super(props);     
@@ -105,27 +106,31 @@ export class XO extends React.Component{
     }
     //
     render(){       
-        
-        if (this.state.isGameOver){
-            let message = this.winningPlayer? `Player ${this.winningPlayer} won!!`:'Draw...';
-            return <div>
-                    {message}
-                    <div><button onClick={this.startGame}>Play again</button></div>
-                    </div>;
-        }
-        else{
-            let cells = this.cells;            
-            let board =[];
-            for (let i = 0,keyID=0; i < cells.length; i++) {
-                for (let j = 0; j < cells[i].length; j++,keyID++) {
-                    board.push(<Cell key={keyID} 
+        let board = [];
+        let gameStatus=null;
+        let cells = this.cells; 
+        if (this.state.isGameOver)
+            gameStatus = this.winningPlayer? `Player ${this.winningPlayer} won!!`:'Draw...';
+        else
+            gameStatus = this.togglePlayer() + ' turn' ;
+        //          
+        for (let i = 0,keyID=0; i < cells.length; i++) {
+            for (let j = 0; j < cells[i].length; j++,keyID++) {
+                board.push(<Cell key={keyID} 
                                 player={cells[i][j]}
                                 onSelected={this.move}
                                 rowNumber={i} 
-                                colNumber={j}></Cell>);            
-                }
+                                colNumber={j}>
+                            </Cell>);            
             }
-            return  <div className="xo">{board}</div>;
-        }
+        }  
+        //          
+        return  <div className="xo">
+                    <div className='wholeLine'>
+                        <button onClick={this.startGame}>Play again</button>
+                    </div>
+                    {board}
+                    <div className='wholeLine'>{gameStatus}</div>
+                </div>;
     }
 }

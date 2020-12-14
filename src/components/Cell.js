@@ -21,7 +21,7 @@ export class Cell extends React.Component{
     //
     render(){
         var {cssClass,player} = this.props;
-        player =player ? player:'*';
+        player =player ? player:'?';
         return <div onClick={this.clicked} className={cssClass}>{player}</div>;
     }
     //
