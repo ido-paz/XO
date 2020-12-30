@@ -1,12 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import reportWebVitals from './reportWebVitals';
-import { XO } from './components/XO';
+import { Board } from './components/Board';
 
 ReactDOM.render(
   <React.StrictMode>
-    <XO />
+    <Board />
   </React.StrictMode>,
   document.getElementById('root')
 );

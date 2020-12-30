@@ -1,9 +1,0 @@
-.xo{
-    display: grid;
-    grid-template-columns: auto auto auto;
-    background-color: DodgerBlue;
-}
-.wholeLine{
-    grid-column-start: 1;
-    grid-column-end: 4;
-}
